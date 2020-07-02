@@ -21,7 +21,6 @@ if(count($_POST) == 0){
 } else {
     $num_knights = $_POST['num_knights'];
     $obj_tournament = new Tournament($num_knights);
-    //$obj_tournament = new Knight();
     echo '<pre>';
     print_r($obj_tournament->getWinner());
 }
