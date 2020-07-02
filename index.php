@@ -1,6 +1,10 @@
 <?php
 
-use Tournament;
+use Royal\{Tournament,Knight};
+
+spl_autoload_register(function ($class) {
+    require_once($class . '.php');
+});
 
 echo 'The king\'s tournament';
 echo '<br>';
@@ -17,6 +21,8 @@ if(count($_POST) == 0){
 } else {
     $num_knights = $_POST['num_knights'];
     $obj_tournament = new Tournament($num_knights);
+    //$obj_tournament = new Knight();
     echo '<pre>';
     print_r($obj_tournament->getWinner());
 }
+
