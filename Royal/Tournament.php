@@ -16,12 +16,13 @@ class Tournament
 
         for($i=0;$i < $number_of_competitors;$i++){
             $obj_knight = new Knight($i+1);
-            $obj_knight->setName('Pedro'.'_'.($i+1));
-            //$obj_knight->setName($this->randomName().'_'.$i);
+            $obj_knight->setName($this->randomName().'_'.$i);
             $obj_knight->setKnightsAlreadyDueled(null);
             $arr_obj_knights[] = $obj_knight;
         }
-        $this->setWinner($this->death_match($arr_obj_knights));
+        $this->death_match($arr_obj_knights, false);
+
+        $this->setWinner();
     }
 
 
@@ -41,7 +42,7 @@ class Tournament
         $this->winner = $winner;
     }
 
-    private function randomName() : array {
+    private function randomName() : string {
         $names = array(
             'Sebastian',
             'Napoleon',
@@ -53,19 +54,31 @@ class Tournament
     }
 
     private function death_match(array $arr_obj_knights) : array{
-        foreach($arr_obj_knights as $knight){
-            $this->duel($knight, $arr_obj_knights);
+        //echo '<pre>'; print_r($arr_obj_knights);
+        if(count($arr_obj_knights) == 1){
+            return $arr_obj_knights;
         }
-        return $arr_obj_knights;
-    }
 
-    private function duel (object $knight, $arr_obj_knights) : void{
+        foreach($arr_obj_knights as $knight){
+            if($knight->getLifePoints() > 0){
+                $this->round($knight, $arr_obj_knights);
+            } else {
+                unset($knight);
+            }
+            $this->clear_round($knight);
+        }
+        
+        echo '<pre>'; print_r($arr_obj_knights);   die;   
+        $this->death_match($arr_obj_knights);
+        
+    }
+    private function round (object $knight, $arr_obj_knights) : void{
         $num_knights = count($arr_obj_knights);
         for($i=0;$i < $num_knights-1;$i++){
             if($num_knights >= ($i+1)){
-                if(!in_array($arr_obj_knights[$i+1]->getId(),$knight->getKnightsAlreadyDueled()) && 
-                $arr_obj_knights[$i+1]->getId() != $knight->getId()){    
-                    $adversary = $arr_obj_knights[$i+1];
+                $adversary = $arr_obj_knights[$i+1];
+                if(!in_array($adversary->getId(),$knight->getKnightsAlreadyDueled()) && 
+                    $adversary->getId() != $knight->getId()){    
                     
                     $adversary->receive_attack($knight->sword_attack());
                     $knight->setKnightsAlreadyDueled($adversary->getId());
@@ -75,6 +88,13 @@ class Tournament
                 }
             }
         }
-        
+    }
+
+    private function clear_round(object $already_dueled) : void{
+        //echo '<pre>'; print_r($already_dueled);   die;   
+        foreach($already_dueled->getKnightsAlreadyDueled() as $knight_id){
+            $knight_id = null;
+        }
+        echo '<pre>'; print_r($already_dueled->getKnightsAlreadyDueled());   die;
     }
 }
