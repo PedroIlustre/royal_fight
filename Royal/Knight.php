@@ -32,9 +32,13 @@ class Knight implements action
     /**
      * @param mixed $knights_already_dueled
      */
-    public function setKnightsAlreadyDueled($knights_already_dueled)
-    {
-        $this->knights_already_dueled[] = $knights_already_dueled;
+    public function setKnightsAlreadyDueled($knights_already_dueled = null)
+    {  
+        if($knights_already_dueled != null){
+            $this->knights_already_dueled[] = $knights_already_dueled;
+        } else {
+            $this->knights_already_dueled = null;
+        }
     }
 
     /**
@@ -93,7 +97,7 @@ class Knight implements action
 
     public function spear_attack()
     {
-        return(rand(0, 9));
+        return(rand(0, 15));
     }
 
     public function receive_attack($attack){

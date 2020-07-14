@@ -21,7 +21,10 @@ if(count($_POST) == 0){
 } else {
     $num_knights = $_POST['num_knights'];
     $obj_tournament = new Tournament($num_knights);
-    echo '<pre>';
-    print_r($obj_tournament->getWinner());
+    $winner = $obj_tournament->getWinner();
+    array_walk($winner, function ($knight,$k){
+        echo '<pre>The winner is: '.$knight->getName();
+        echo '<pre>His life points were: '.$knight->getLifePoints();
+    });
 }
 
